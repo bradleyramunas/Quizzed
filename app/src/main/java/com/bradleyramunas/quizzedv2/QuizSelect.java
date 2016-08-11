@@ -63,6 +63,7 @@ public class QuizSelect extends AppCompatActivity {
                         if(i.getTag() != null && i.getTag().equals("quiz")){
                             String quizName = i.getName().toString();
                         }else if(i.getTag() != null && i.getTag().equals("add")){
+                            drawer.closeDrawer();
                             startActivityForResult(intent, 1);
                         }
 
@@ -87,6 +88,12 @@ public class QuizSelect extends AppCompatActivity {
     }
 
     @Override
+    public void onBackPressed(){
+        if(drawer.isDrawerOpen()) drawer.closeDrawer();
+        else super.onBackPressed();
+    }
+
+    @Override
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
         Log.e("HERE", "test");
         this.getMenuInflater().inflate(R.menu.quiz_context_menu, menu);
@@ -95,6 +102,8 @@ public class QuizSelect extends AppCompatActivity {
 
     public void populateDrawer(){
         drawer.removeAllItems();
+        drawer.removeAllStickyFooterItems();
+
         drawer.addItem(new PrimaryDrawerItem().withName("Home").withIcon(R.drawable.ic_home_black_24dp));
         drawer.addItem(new SectionDrawerItem().withName("My Quizzes"));
         ArrayList<String> names = db.getQuizNames();
@@ -141,10 +150,11 @@ public class QuizSelect extends AppCompatActivity {
                     }
                 }
 
+
                 Quiz quiz = new Quiz(b.getString("quizName"));
                 quiz.setQuestionList(forQuiz);
                 db.addNewQuiz(quiz);
-
+                populateDrawer();
 
             }else if(resultCode == EMPTY){
                 Toast.makeText(this, "EMPTY", Toast.LENGTH_LONG).show();

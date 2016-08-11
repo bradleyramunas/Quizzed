@@ -15,9 +15,8 @@ import java.util.ArrayList;
  */
 public class MyDBHandler extends SQLiteOpenHelper{
 
-    private static final int DATABASE_VERSION = 4;
+    private static final int DATABASE_VERSION = 12;
     private static final String DATABASE_NAME = "QUIZZES.db";
-    public static final String TABLE_SAMPLE_QUIZ = "SampleQuiz";
     public static final String COLUMN_QUESTION_TEXT = "questionText";
     public static final String COLUMN_QUESTION_TYPE = "questionType";
     public static final String COLUMN_QUESTION_ANSWER = "questionAnswer";
@@ -36,39 +35,36 @@ public class MyDBHandler extends SQLiteOpenHelper{
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        SQLiteStatement query = db.compileStatement("CREATE TABLE '?' (? TEXT, ? TEXT, ? TEXT, ? TEXT, ? TEXT, ? TEXT, ? TEXT)");
-        query.bindString(1, TABLE_SAMPLE_QUIZ);
-        query.bindString(2, COLUMN_QUESTION_TEXT);
-        query.bindString(3, COLUMN_QUESTION_TYPE);
-        query.bindString(4, COLUMN_QUESTION_ANSWER);
-        query.bindString(5, COLUMN_QUESTION_CHOICE_ONE);
-        query.bindString(6, COLUMN_QUESTION_CHOICE_TWO);
-        query.bindString(7, COLUMN_QUESTION_CHOICE_THREE);
-        query.bindString(8, COLUMN_QUESTION_CHOICE_FOUR);
-        query.execute();
-        db.setTransactionSuccessful();
+
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        ArrayList<String> names = new ArrayList<>();
+        Cursor c = db.rawQuery("SELECT name FROM sqlite_master WHERE type='table'", null);
+        c.moveToFirst();
+        c.moveToNext();
+        while(!c.isAfterLast()){
+            names.add(c.getString(0));
+            c.moveToNext();
+        }
+        c.close();
+        for(String s : names){
+            String sql = "DROP TABLE IF EXISTS '"+s+"'";
+            db.execSQL(sql);
+        }
 
     }
 
     public void addNewQuiz(Quiz q){
         SQLiteDatabase db = getWritableDatabase();
-        SQLiteStatement query = db.compileStatement("CREATE TABLE '?' (? TEXT, ? TEXT, ? TEXT, ? TEXT, ? TEXT, ? TEXT, ? TEXT)");
-        query.bindString(1, q.getName());
-        query.bindString(2, COLUMN_QUESTION_TEXT);
-        query.bindString(3, COLUMN_QUESTION_TYPE);
-        query.bindString(4, COLUMN_QUESTION_ANSWER);
-        query.bindString(5, COLUMN_QUESTION_CHOICE_ONE);
-        query.bindString(6, COLUMN_QUESTION_CHOICE_TWO);
-        query.bindString(7, COLUMN_QUESTION_CHOICE_THREE);
-        query.bindString(8, COLUMN_QUESTION_CHOICE_FOUR);
-        query.execute();
+        String command = "CREATE TABLE '"+ q.getName() +"' (questionText TEXT, questionType TEXT, questionAnswer TEXT, questionAnswerChoiceOne TEXT, questionAnswerChoiceTwo TEXT," +
+                " questionAnswerChoiceThree TEXT, questionAnswerChoiceFour TEXT)";
+        db.execSQL(command);
+
         ArrayList<Question> questions = q.getQuestionList();
 
-        String sql = "INSERT INTO '?' (questionText, questionType, questionAnswer, questionAnswerChoiceOne, questionAnswerChoiceTwo, questionAnswerChoiceThree, questionAnswerChoiceFour)" +
+        String sql = "INSERT INTO '" + q.getName() + "' (questionText, questionType, questionAnswer, questionAnswerChoiceOne, questionAnswerChoiceTwo, questionAnswerChoiceThree, questionAnswerChoiceFour)" +
                 " VALUES (?, ?, ?, ?, ?, ?, ?)";
 
         SQLiteStatement statement = db.compileStatement(sql);
@@ -79,14 +75,13 @@ public class MyDBHandler extends SQLiteOpenHelper{
                 QuestionMCQ mcq = (QuestionMCQ) i;
 
                 statement.clearBindings();
-                statement.bindString(1, q.getName());
-                statement.bindString(2, mcq.get_questionText());
-                statement.bindString(3, QUESTION_TYPE_MCQ);
-                statement.bindString(4, mcq.get_answerText());
-                statement.bindString(5, mcq.get_optionOne());
-                statement.bindString(6, mcq.get_optionTwo());
-                statement.bindString(7, mcq.get_optionThree());
-                statement.bindString(8, mcq.get_optionFour());
+                statement.bindString(1, mcq.get_questionText());
+                statement.bindString(2, QUESTION_TYPE_MCQ);
+                statement.bindString(3, mcq.get_answerText());
+                statement.bindString(4, mcq.get_optionOne());
+                statement.bindString(5, mcq.get_optionTwo());
+                statement.bindString(6, mcq.get_optionThree());
+                statement.bindString(7, mcq.get_optionFour());
                 statement.executeInsert();
 
             }else{
@@ -94,30 +89,25 @@ public class MyDBHandler extends SQLiteOpenHelper{
                 QuestionFRQ frq = (QuestionFRQ) i;
 
                 statement.clearBindings();
-                statement.bindString(1, q.getName());
-                statement.bindString(2, frq.get_questionText());
-                statement.bindString(3, QUESTION_TYPE_FRQ);
-                statement.bindString(4, frq.get_answerText());
+                statement.bindString(1, frq.get_questionText());
+                statement.bindString(2, QUESTION_TYPE_FRQ);
+                statement.bindString(3, frq.get_answerText());
+                statement.bindString(4, " ");
                 statement.bindString(5, " ");
                 statement.bindString(6, " ");
                 statement.bindString(7, " ");
-                statement.bindString(8, " ");
                 statement.executeInsert();
 
             }
         }
 
-        db.setTransactionSuccessful();
         db.close();
     }
 
     public void deleteQuiz(String name){
         SQLiteDatabase db = getWritableDatabase();
-        String sql = "DROP TABLE IF EXISTS '?'";
-        SQLiteStatement statement = db.compileStatement(sql);
-        statement.bindString(1, name);
-        statement.execute();
-        db.setTransactionSuccessful();
+        String sql = "DROP TABLE IF EXISTS '" + name + "'";
+        db.execSQL(sql);
         db.close();
     }
 
