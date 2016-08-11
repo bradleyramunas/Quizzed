@@ -1,0 +1,47 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.bradleyramunas.quizzedv2.FragmentCreateFRQ"
+    android:layout_marginBottom="8dp">
+
+    <!-- TODO: Update blank fragment layout -->
+
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="10dp">
+
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:id="@+id/imageView2"
+                android:background="@drawable/ic_clear_20dp"
+                android:minHeight="4dp"
+                android:minWidth="4dp"
+                android:layout_gravity="end"
+                android:onClick="onDeleteQuestionPress"
+                android:layout_marginTop="4dp"
+                android:layout_marginRight="4dp" />
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/questionText" />
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/answerText"
+                android:layout_marginBottom="16dp" />
+        </LinearLayout>
+
+    </android.support.v7.widget.CardView>
+
+
+</FrameLayout>

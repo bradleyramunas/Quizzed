@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.bradleyramunas.quizzedv2.QuizSelect">
+    <item android:id="@+id/deleteQuiz" android:title="Delete"></item>
+    <item android:id="@+id/editQuiz" android:title="Edit"></item>
+</menu>
