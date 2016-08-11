@@ -131,7 +131,7 @@ public class MyDBHandler extends SQLiteOpenHelper{
 
         Cursor c = db.rawQuery(query, null);
         c.moveToFirst();
-        while(!c.isAfterLast() && !c.getString(0).equals("android_metadata")){
+        while(!c.isAfterLast()){
             if(c.getString(0).equals("android_metadata")){
 
             }else{
