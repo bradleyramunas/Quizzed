@@ -114,7 +114,6 @@ public class NewQuiz extends AppCompatActivity {
                 b.putString("optionTwo", mcq.getOptionTwo());
                 b.putString("optionThree", mcq.getOptionThree());
                 b.putString("optionFour", mcq.getOptionFour());
-                b.putString("answerText", mcq.getSelectedOption());
 
             }
             i.putExtra(tag+z, b);

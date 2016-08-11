@@ -29,6 +29,14 @@ public class FragmentCreateMCQ extends Fragment {
     private RadioGroup radioGroup;
     private LinearLayout optionHolder;
 
+    EditText questionTextET;
+    EditText optionOneET;
+    EditText optionTwoET;
+    EditText optionThreeET;
+    EditText optionFourET;
+
+
+
 
     public FragmentCreateMCQ() {
         // Required empty public constructor
@@ -68,15 +76,15 @@ public class FragmentCreateMCQ extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_fragment_create_mcq, container, false);
 
-        EditText questionTextET = (EditText) view.findViewById(R.id.questionText);
+        questionTextET = (EditText) view.findViewById(R.id.questionText);
         questionTextET.setHint(questionText);
-        EditText optionOneET = (EditText) view.findViewById(R.id.optionOneText);
+        optionOneET = (EditText) view.findViewById(R.id.optionOneText);
         optionOneET.setHint(optionOne);
-        EditText optionTwoET = (EditText) view.findViewById(R.id.optionTwoText);
+        optionTwoET = (EditText) view.findViewById(R.id.optionTwoText);
         optionTwoET.setHint(optionTwo);
-        EditText optionThreeET = (EditText) view.findViewById(R.id.optionThreeText);
+        optionThreeET = (EditText) view.findViewById(R.id.optionThreeText);
         optionThreeET.setHint(optionThree);
-        EditText optionFourET = (EditText) view.findViewById(R.id.optionFourText);
+        optionFourET = (EditText) view.findViewById(R.id.optionFourText);
         optionFourET.setHint(optionFour);
 
         radioGroup = (RadioGroup) view.findViewById(R.id.radioGroup);
@@ -86,32 +94,28 @@ public class FragmentCreateMCQ extends Fragment {
     }
 
     public String getQuestionText() {
-        return questionText;
+        return questionTextET.getText().toString();
     }
 
     public String getAnswerText() {
-        return answerText;
-    }
-
-    public String getOptionOne() {
-        return optionOne;
-    }
-
-    public String getOptionTwo() {
-        return optionTwo;
-    }
-
-    public String getOptionThree() {
-        return optionThree;
-    }
-
-    public String getOptionFour() {
-        return optionFour;
-    }
-
-    public String getSelectedOption(){
         int loc = radioGroup.indexOfChild(radioGroup.findViewById(radioGroup.getCheckedRadioButtonId()));
         EditText et = (EditText) optionHolder.getChildAt(loc);
         return et.getText().toString();
+    }
+
+    public String getOptionOne() {
+        return optionOneET.getText().toString();
+    }
+
+    public String getOptionTwo() {
+        return optionTwoET.getText().toString();
+    }
+
+    public String getOptionThree() {
+        return optionThreeET.getText().toString();
+    }
+
+    public String getOptionFour() {
+        return optionFourET.getText().toString();
     }
 }

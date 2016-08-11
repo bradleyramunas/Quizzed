@@ -55,7 +55,6 @@ public class MyDBHandler extends SQLiteOpenHelper{
     }
 
     public void addNewQuiz(Quiz q){
-        //TODO: Fix this database code, not creating columns correctly
         SQLiteDatabase db = getWritableDatabase();
         SQLiteStatement query = db.compileStatement("CREATE TABLE '?' (? TEXT, ? TEXT, ? TEXT, ? TEXT, ? TEXT, ? TEXT, ? TEXT)");
         query.bindString(1, q.getName());
@@ -133,7 +132,7 @@ public class MyDBHandler extends SQLiteOpenHelper{
         c.moveToFirst();
         while(!c.isAfterLast()){
             if(c.getString(0).equals("android_metadata")){
-
+                continue;
             }else{
                 String type = c.getString(c.getColumnIndex(COLUMN_QUESTION_TYPE));
                 if(type.equals(QUESTION_TYPE_MCQ)){
