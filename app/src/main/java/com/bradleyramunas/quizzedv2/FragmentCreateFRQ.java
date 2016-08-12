@@ -15,8 +15,12 @@ public class FragmentCreateFRQ extends Fragment {
     private String questionText;
     private String answerText;
 
-    EditText q;
-    EditText a;
+    private EditText q;
+    private EditText a;
+
+
+    //if type = false => default, if type = true => custom
+    private boolean creationType;
 
     public FragmentCreateFRQ() {
         // Required empty public constructor
@@ -28,6 +32,17 @@ public class FragmentCreateFRQ extends Fragment {
         Bundle args = new Bundle();
         args.putString("questionText", "Question");
         args.putString("answerText", "Answer");
+        args.putBoolean("isCustom", false);
+        fragment.setArguments(args);
+        return fragment;
+    }
+
+    public static FragmentCreateFRQ newCustomInstance(String question, String answer) {
+        FragmentCreateFRQ fragment = new FragmentCreateFRQ();
+        Bundle args = new Bundle();
+        args.putString("questionText", question);
+        args.putString("answerText", answer);
+        args.putBoolean("isCustom", true);
         fragment.setArguments(args);
         return fragment;
     }
@@ -39,6 +54,7 @@ public class FragmentCreateFRQ extends Fragment {
         if (getArguments() != null) {
             questionText = getArguments().getString("questionText");
             answerText = getArguments().getString("answerText");
+            creationType = getArguments().getBoolean("isCustom");
 
         }
     }
@@ -52,8 +68,16 @@ public class FragmentCreateFRQ extends Fragment {
 
         q = (EditText) view.findViewById(R.id.questionText);
         a = (EditText) view.findViewById(R.id.answerText);
-        q.setHint(questionText);
-        a.setHint(answerText);
+        if(creationType){
+            q.setHint("Question");
+            a.setHint("Answer");
+            q.setText(questionText);
+            a.setHint(answerText);
+        }else{
+            q.setHint(questionText);
+            a.setHint(answerText);
+        }
+
 
         return view;
     }

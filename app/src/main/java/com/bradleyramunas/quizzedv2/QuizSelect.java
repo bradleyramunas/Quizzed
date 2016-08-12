@@ -123,7 +123,35 @@ public class QuizSelect extends AppCompatActivity {
                 drawer.removeItem(id);
                 break;
             case "Edit":
-
+                Intent i = new Intent(this, EditQuiz.class);
+                int tagnum = 0;
+                PrimaryDrawerItem nameOfQuiz = (PrimaryDrawerItem) drawer.getDrawerItem(id);
+                Quiz selected = db.getQuizFromDatabase(nameOfQuiz.getName().toString());
+                i.putExtra("originalQuizName", selected.getName());
+                i.putExtra("questionAmount", selected.getQuestionList().size());
+                //mcq = false, frq = true
+                for(Question q : selected.getQuestionList()){
+                    Bundle b = new Bundle();
+                    if(q.getClass() == QuestionFRQ.class){
+                        Log.e("HERE", "HERE");
+                        QuestionFRQ frq = (QuestionFRQ) q;
+                        b.putString("questionText", frq.get_questionText());
+                        b.putString("answerText", frq.get_answerText());
+                        b.putBoolean("questionType", true);
+                    }else{
+                        QuestionMCQ mcq = (QuestionMCQ) q;
+                        b.putString("questionText", mcq.get_questionText());
+                        b.putString("answerText", mcq.get_answerText());
+                        b.putString("optionOne", mcq.get_optionOne());
+                        b.putString("optionTwo", mcq.get_optionTwo());
+                        b.putString("optionThree", mcq.get_optionThree());
+                        b.putString("optionFour", mcq.get_optionFour());
+                        b.putBoolean("questionType", false);
+                    }
+                    i.putExtra("bundle"+tagnum, b);
+                    tagnum++;
+                }
+                startActivityForResult(i, 2);
                 break;
         }
         return true;
@@ -156,7 +184,8 @@ public class QuizSelect extends AppCompatActivity {
         if(requestCode == 1){
             if(resultCode == GOOD){
 
-                Toast.makeText(this, "GOOD", Toast.LENGTH_LONG).show();
+                //Toast.makeText(this, "GOOD", Toast.LENGTH_LONG).show();
+
                 ArrayList<Question> forQuiz = new ArrayList<>();
                 Bundle b = intent.getExtras();
                 int amount = b.getInt("questionAmount");

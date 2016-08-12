@@ -18,10 +18,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".NewQuiz"
-            android:windowSoftInputMode="stateHidden">
-
-        </activity>
+        <activity
+            android:name=".NewQuiz"
+            android:windowSoftInputMode="stateHidden"></activity>
+        <activity
+            android:name=".EditQuiz"
+            android:windowSoftInputMode="stateHidden"></activity>
     </application>
 
 </manifest>

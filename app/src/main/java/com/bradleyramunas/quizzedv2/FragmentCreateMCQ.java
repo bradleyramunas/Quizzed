@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
 
@@ -29,11 +30,14 @@ public class FragmentCreateMCQ extends Fragment {
     private RadioGroup radioGroup;
     private LinearLayout optionHolder;
 
-    EditText questionTextET;
-    EditText optionOneET;
-    EditText optionTwoET;
-    EditText optionThreeET;
-    EditText optionFourET;
+    private EditText questionTextET;
+    private EditText optionOneET;
+    private EditText optionTwoET;
+    private EditText optionThreeET;
+    private EditText optionFourET;
+
+    //if type = false => default, if type = true => custom
+    private boolean creationType;
 
 
 
@@ -52,6 +56,21 @@ public class FragmentCreateMCQ extends Fragment {
         args.putString("optionTwo", "Answer 2");
         args.putString("optionThree", "Answer 3");
         args.putString("optionFour", "Answer 4");
+        args.putBoolean("isCustom", false);
+        fragment.setArguments(args);
+        return fragment;
+    }
+
+    public static FragmentCreateMCQ newCustomInstance(String question, String answer, String op1, String op2, String op3, String op4){
+        FragmentCreateMCQ fragment = new FragmentCreateMCQ();
+        Bundle args = new Bundle();
+        args.putString("questionText", question);
+        args.putString("answerText", answer);
+        args.putString("optionOne", op1);
+        args.putString("optionTwo", op2);
+        args.putString("optionThree", op3);
+        args.putString("optionFour", op4);
+        args.putBoolean("isCustom", true);
         fragment.setArguments(args);
         return fragment;
     }
@@ -66,6 +85,7 @@ public class FragmentCreateMCQ extends Fragment {
             optionTwo = getArguments().getString("optionTwo");
             optionThree = getArguments().getString("optionThree");
             optionFour = getArguments().getString("optionFour");
+            creationType = getArguments().getBoolean("isCustom");
 
         }
     }
@@ -77,18 +97,49 @@ public class FragmentCreateMCQ extends Fragment {
         View view = inflater.inflate(R.layout.fragment_fragment_create_mcq, container, false);
 
         questionTextET = (EditText) view.findViewById(R.id.questionText);
-        questionTextET.setHint(questionText);
         optionOneET = (EditText) view.findViewById(R.id.optionOneText);
-        optionOneET.setHint(optionOne);
         optionTwoET = (EditText) view.findViewById(R.id.optionTwoText);
-        optionTwoET.setHint(optionTwo);
         optionThreeET = (EditText) view.findViewById(R.id.optionThreeText);
-        optionThreeET.setHint(optionThree);
         optionFourET = (EditText) view.findViewById(R.id.optionFourText);
-        optionFourET.setHint(optionFour);
-
         radioGroup = (RadioGroup) view.findViewById(R.id.radioGroup);
         optionHolder = (LinearLayout) view.findViewById(R.id.optionHolder);
+
+        if(creationType){
+            questionTextET.setHint("Question");
+            optionOneET.setHint("Answer 1");
+            optionTwoET.setHint("Answer 2");
+            optionThreeET.setHint("Answer 3");
+            optionFourET.setHint("Answer 4");
+            questionTextET.setText(questionText);
+            optionOneET.setText(optionOne);
+            optionTwoET.setText(optionTwo);
+            optionThreeET.setText(optionThree);
+            optionFourET.setText(optionFour);
+            if(answerText.equals(optionOne)){
+                RadioButton rb = (RadioButton) radioGroup.getChildAt(0);
+                rb.setChecked(true);
+            }else if(answerText.equals(optionTwo)){
+                RadioButton rb = (RadioButton) radioGroup.getChildAt(1);
+                rb.setChecked(true);
+            }else if(answerText.equals(optionThree)){
+                RadioButton rb = (RadioButton) radioGroup.getChildAt(2);
+                rb.setChecked(true);
+            }else if(answerText.equals(optionFour)){
+                RadioButton rb = (RadioButton) radioGroup.getChildAt(3);
+                rb.setChecked(true);
+            }
+        }else{
+            questionTextET.setHint(questionText);
+            optionOneET.setHint(optionOne);
+            optionTwoET.setHint(optionTwo);
+            optionThreeET.setHint(optionThree);
+            optionFourET.setHint(optionFour);
+        }
+
+
+
+
+
 
         return view;
     }
