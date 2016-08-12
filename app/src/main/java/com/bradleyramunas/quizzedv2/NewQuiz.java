@@ -92,6 +92,32 @@ public class NewQuiz extends AppCompatActivity {
 
     public void onFinishChecked(){
         int children = questionHolder.getChildCount();
+
+        if(title.getText().toString().equals("")){
+            Toast.makeText(this, "You have no title!", Toast.LENGTH_LONG).show();
+            return;
+        }
+
+        for(int z = 0; z<children; z++){
+            FrameLayout fl = (FrameLayout) questionHolder.getChildAt(z);
+
+            Fragment f = getSupportFragmentManager().findFragmentById(fl.getId());
+
+            if(f.getClass() == FragmentCreateFRQ.class){
+                if(!((FragmentCreateFRQ)f).isProper()){
+                    Toast.makeText(this, "One or more of your free response questions are missing answers.", Toast.LENGTH_LONG).show();
+                    return;
+                }
+            }else{
+                if(!((FragmentCreateMCQ)f).isProper()){
+                    Toast.makeText(this, "One or more of your multiple choice questions are missing answers.", Toast.LENGTH_LONG).show();
+                    return;
+                }
+            }
+        }
+
+
+        //tfw u hate parceables so u just make bundles with a bunch of extras lol
         Intent i = new Intent();
         String tag = "bundle";
         for(int z = 0; z<children; z++){

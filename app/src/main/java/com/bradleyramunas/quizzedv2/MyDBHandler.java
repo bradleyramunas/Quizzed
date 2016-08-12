@@ -15,7 +15,7 @@ import java.util.ArrayList;
  */
 public class MyDBHandler extends SQLiteOpenHelper{
 
-    private static final int DATABASE_VERSION = 12;
+    private static final int DATABASE_VERSION = 13;
     private static final String DATABASE_NAME = "QUIZZES.db";
     public static final String COLUMN_QUESTION_TEXT = "questionText";
     public static final String COLUMN_QUESTION_TYPE = "questionType";

@@ -118,4 +118,12 @@ public class FragmentCreateMCQ extends Fragment {
     public String getOptionFour() {
         return optionFourET.getText().toString();
     }
+
+    //Function is used to check if an answer choice has been selected.
+    public boolean isProper(){
+        if(radioGroup.getCheckedRadioButtonId() != -1 && !getQuestionText().equals("")){
+            return true;
+        }
+        return false;
+    }
 }

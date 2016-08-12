@@ -66,4 +66,13 @@ public class FragmentCreateFRQ extends Fragment {
         return a.getText().toString();
     }
 
+
+    //used to check if question has an answer
+    public boolean isProper(){
+        if(getQuestionText().equals("") || getAnswerText().equals("")){
+            return false;
+        }
+        return true;
+    }
+
 }
