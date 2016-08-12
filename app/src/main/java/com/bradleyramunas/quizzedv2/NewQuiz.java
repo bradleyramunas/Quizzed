@@ -39,11 +39,12 @@ public class NewQuiz extends AppCompatActivity {
         }
     }
 
-    ArrayList<Quiz> questions;
-    LinearLayout questionHolder;
-    EditText title;
-    FloatingActionButton fab;
-    CoordinatorLayout rl;
+    private ArrayList<Quiz> questions;
+    private LinearLayout questionHolder;
+    private EditText title;
+    private FloatingActionButton fab;
+    private CoordinatorLayout rl;
+    private MyDBHandler db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,6 +55,7 @@ public class NewQuiz extends AppCompatActivity {
         questions = new ArrayList<>();
         fab = (FloatingActionButton) findViewById(R.id.fab);
         rl = (CoordinatorLayout) findViewById(R.id.forSnackbar);
+        db = new MyDBHandler(this, null);
 
     }
 
@@ -92,9 +94,15 @@ public class NewQuiz extends AppCompatActivity {
 
     public void onFinishChecked(){
         int children = questionHolder.getChildCount();
+        ArrayList<String> quizNames = db.getQuizNames();
 
         if(title.getText().toString().equals("")){
             Toast.makeText(this, "You have no title!", Toast.LENGTH_LONG).show();
+            return;
+        }
+
+        if(quizNames.contains(title.getText().toString())){
+            Toast.makeText(this, "A quiz with that name already exists!", Toast.LENGTH_SHORT).show();
             return;
         }
 

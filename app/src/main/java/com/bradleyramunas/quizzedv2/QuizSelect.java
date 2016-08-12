@@ -12,6 +12,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.ContextMenu;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -27,11 +28,18 @@ import com.mikepenz.materialdrawer.model.SectionDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class QuizSelect extends AppCompatActivity {
 
     public Drawer drawer = null;
     public MyDBHandler db;
+
+    public static final AtomicInteger identifier = new AtomicInteger(0);
+
+    //How am i supposed to tell what view i long pressed when i am in the onContextItemSelected method?
+    private long id = -1;
 
     //RESULTCODES
     public static final int GOOD = 1000;
@@ -74,12 +82,17 @@ public class QuizSelect extends AppCompatActivity {
                 .withOnDrawerItemLongClickListener(new Drawer.OnDrawerItemLongClickListener() {
                     @Override
                     public boolean onItemLongClick(View view, int position, IDrawerItem drawerItem) {
-                        LinearLayout ll = (LinearLayout) view;
-                        LinearLayout ll2 = (LinearLayout) ll.getChildAt(1);
-                        AppCompatTextView tv = (AppCompatTextView) ll2.getChildAt(0);
+                        PrimaryDrawerItem i = (PrimaryDrawerItem) drawerItem;
+                        if(i.getTag() != null && i.getTag().equals("quiz")){
+                            id = drawerItem.getIdentifier();
+                            QuizSelect.this.registerForContextMenu(view);
+                            openContextMenu(view);
 
-                        //LAYOUT: View = LinearLayout -> 2 LinearLayoutChildren -> 1st LinearLayoutChildren has Child AppCompatTextView (0th) -> Child = name of quiz!!!
-                        return true;
+                            return true;
+                        }else {
+
+                        }
+                        return false;
                     }
                 })
                 .build();
@@ -100,6 +113,22 @@ public class QuizSelect extends AppCompatActivity {
         super.onCreateContextMenu(menu, v, menuInfo);
     }
 
+    @Override
+    public boolean onContextItemSelected(MenuItem item){
+        String title = item.getTitle().toString();
+        switch (title){
+            case "Delete":
+                PrimaryDrawerItem pdi = (PrimaryDrawerItem) drawer.getDrawerItem(id);
+                db.deleteQuiz(pdi.getName().toString());
+                drawer.removeItem(id);
+                break;
+            case "Edit":
+
+                break;
+        }
+        return true;
+    }
+
     public void populateDrawer(){
         drawer.removeAllItems();
         drawer.removeAllStickyFooterItems();
@@ -109,7 +138,7 @@ public class QuizSelect extends AppCompatActivity {
         ArrayList<String> names = db.getQuizNames();
         for(String s : names){
             final String name = s;
-            drawer.addItem(new PrimaryDrawerItem().withName(s).withIcon(R.drawable.ic_library_books_black_24dp).withTag("quiz"));
+            drawer.addItem(new PrimaryDrawerItem().withName(s).withIcon(R.drawable.ic_library_books_black_24dp).withTag("quiz").withIdentifier(identifier.incrementAndGet()));
         }
         drawer.addStickyFooterItem(new PrimaryDrawerItem().withName("Add Quiz").withIcon(R.drawable.ic_add_box_black_24dp).withSelectable(false).withTag("add"));
     }
