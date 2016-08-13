@@ -3,9 +3,11 @@ package com.bradleyramunas.quizzedv2;
 import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatTextView;
 import android.support.v7.widget.Toolbar;
@@ -118,9 +120,25 @@ public class QuizSelect extends AppCompatActivity {
         String title = item.getTitle().toString();
         switch (title){
             case "Delete":
-                PrimaryDrawerItem pdi = (PrimaryDrawerItem) drawer.getDrawerItem(id);
-                db.deleteQuiz(pdi.getName().toString());
-                drawer.removeItem(id);
+                new AlertDialog.Builder(this)
+                        .setTitle("Delete this quiz")
+                        .setMessage("Are you sure you want to delete this quiz?")
+                        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                PrimaryDrawerItem pdi = (PrimaryDrawerItem) drawer.getDrawerItem(id);
+                                db.deleteQuiz(pdi.getName().toString());
+                                drawer.removeItem(id);
+                                dialog.cancel();
+                            }
+                        })
+                        .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.cancel();
+                            }
+                        })
+                        .show();
                 break;
             case "Edit":
                 Intent i = new Intent(this, EditQuiz.class);
