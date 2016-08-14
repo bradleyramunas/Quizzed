@@ -3,6 +3,7 @@ package com.bradleyramunas.quizzedv2;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.database.sqlite.SQLiteStatement;
@@ -168,4 +169,5 @@ public class MyDBHandler extends SQLiteOpenHelper{
         db.close();
         return names;
     }
+
 }

@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -16,6 +17,7 @@ import android.view.ContextMenu;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -35,8 +37,9 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class QuizSelect extends AppCompatActivity {
 
-    public Drawer drawer = null;
-    public MyDBHandler db;
+    private Drawer drawer = null;
+    private MyDBHandler db;
+    private FrameLayout fragmentHolder;
 
     public static final AtomicInteger identifier = new AtomicInteger(0);
 
@@ -54,7 +57,7 @@ public class QuizSelect extends AppCompatActivity {
         setContentView(R.layout.activity_quiz_select);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
+        fragmentHolder = (FrameLayout) findViewById(R.id.fragmentHolder);
         final QuizSelect quiz = this;
 
         final Intent intent = new Intent(this, NewQuiz.class);
@@ -71,7 +74,11 @@ public class QuizSelect extends AppCompatActivity {
                     public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
                         PrimaryDrawerItem i = (PrimaryDrawerItem) drawerItem;
                         if(i.getTag() != null && i.getTag().equals("quiz")){
+                            drawer.closeDrawer();
                             String quizName = i.getName().toString();
+                            Quiz quiz = db.getQuizFromDatabase(quizName);
+                            FragmentDisplayQuiz fdq = FragmentDisplayQuiz.createInstance(quizName, quiz.getQuestionList().size(), "Never");
+                            changeFragment(fdq);
                         }else if(i.getTag() != null && i.getTag().equals("add")){
                             drawer.closeDrawer();
                             startActivityForResult(intent, 1);
@@ -240,6 +247,10 @@ public class QuizSelect extends AppCompatActivity {
                 Toast.makeText(this, "ERROR", Toast.LENGTH_LONG).show();
             }
         }
+    }
+
+    public void changeFragment(Fragment f){
+        getSupportFragmentManager().beginTransaction().replace(fragmentHolder.getId(), f).setCustomAnimations(R.anim.fadein, R.anim.fadeout, R.anim.fadein, R.anim.fadeout).commit();
     }
 
 }

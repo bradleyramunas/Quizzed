@@ -13,4 +13,8 @@
     tools:showIn="@layout/activity_quiz_select"
     android:background="@color/background">
 
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/fragmentHolder"></FrameLayout>
 </RelativeLayout>
