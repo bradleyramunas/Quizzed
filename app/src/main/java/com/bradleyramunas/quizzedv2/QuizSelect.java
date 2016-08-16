@@ -158,7 +158,6 @@ public class QuizSelect extends AppCompatActivity {
                 for(Question q : selected.getQuestionList()){
                     Bundle b = new Bundle();
                     if(q.getClass() == QuestionFRQ.class){
-                        Log.e("HERE", "HERE");
                         QuestionFRQ frq = (QuestionFRQ) q;
                         b.putString("questionText", frq.get_questionText());
                         b.putString("answerText", frq.get_answerText());

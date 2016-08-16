@@ -20,10 +20,11 @@
         </activity>
         <activity
             android:name=".NewQuiz"
-            android:windowSoftInputMode="stateHidden"></activity>
+            android:windowSoftInputMode="stateHidden" />
         <activity
             android:name=".EditQuiz"
-            android:windowSoftInputMode="stateHidden"></activity>
+            android:windowSoftInputMode="stateHidden" />
+        <activity android:name=".LearningMethods.TraditionalQuiz"></activity>
     </application>
 
 </manifest>

@@ -6,8 +6,11 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
+import android.widget.TextView;
 
-public class FragmentMCQ extends Fragment {
+public class FragmentMCQ extends Fragment implements QuestionType{
 
     private String questionText;
     private String answerText;
@@ -15,6 +18,13 @@ public class FragmentMCQ extends Fragment {
     private String optionTwo;
     private String optionThree;
     private String optionFour;
+
+    private TextView questionT;
+    private RadioButton op1;
+    private RadioButton op2;
+    private RadioButton op3;
+    private RadioButton op4;
+    private RadioGroup group;
 
     public FragmentMCQ() {
         // Required empty public constructor
@@ -54,8 +64,33 @@ public class FragmentMCQ extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_fragment_mcq, container, false);
 
+        questionT = (TextView) view.findViewById(R.id.questionText);
+        group = (RadioGroup) view.findViewById(R.id.group);
+        op1 = (RadioButton) view.findViewById(R.id.optionOne);
+        op2 = (RadioButton) view.findViewById(R.id.optionTwo);
+        op3 = (RadioButton) view.findViewById(R.id.optionThree);
+        op4 = (RadioButton) view.findViewById(R.id.optionFour);
+
+        questionT.setText(questionText);
+        op1.setText(optionOne);
+        op2.setText(optionTwo);
+        op3.setText(optionThree);
+        op4.setText(optionFour);
 
         return view;
     }
 
+    @Override
+    public String getQuestionText() {
+        return questionText;
+    }
+
+    @Override
+    public String getAnswerText() {
+        return answerText;
+    }
+
+    public boolean checkAnswer(){
+        return ((RadioButton)group.findViewById(group.getCheckedRadioButtonId())).getText().toString().equals(answerText);
+    }
 }
