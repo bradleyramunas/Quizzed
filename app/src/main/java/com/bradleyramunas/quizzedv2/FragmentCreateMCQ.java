@@ -18,7 +18,6 @@ import android.widget.RadioGroup;
 public class FragmentCreateMCQ extends Fragment {
 
 
-    //TODO: Fix this, get option texts to return from EditTexts
 
 
     private String questionText;

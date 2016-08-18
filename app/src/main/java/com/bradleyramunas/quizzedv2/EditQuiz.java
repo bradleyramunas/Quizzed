@@ -101,19 +101,37 @@ public class EditQuiz extends AppCompatActivity {
 
     @Override
     public void onBackPressed(){
-        setResult(QuizSelect.CANCELED);
-        finish();
+        new AlertDialog.Builder(this)
+                .setTitle("Cancel editing quiz")
+                .setMessage("Are you sure you want to cancel? No changes will be made")
+                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                        setResult(QuizSelect.CANCELED);
+                        finish();
+
+                    }
+                })
+                .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                    }
+                })
+                .show();
+
     }
 
     public void onFinish(View view){
         int children = questionHolder.getChildCount();
-        Log.e("HERE", children+"");
+        //Log.e("HERE", children+"");
         if(children < 1){
             Toast.makeText(this, "There are no questions!", Toast.LENGTH_LONG).show();
         }else{
             new AlertDialog.Builder(this)
-                    .setTitle("Finish creating quiz")
-                    .setMessage("Are you sure you have finished your quiz?")
+                    .setTitle("Finish editing quiz")
+                    .setMessage("Are you sure you have finished editing your quiz?")
                     .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
@@ -141,10 +159,6 @@ public class EditQuiz extends AppCompatActivity {
             return;
         }
 
-        if(quizNames.contains(title.getText().toString())){
-            Toast.makeText(this, "A quiz with that name already exists!", Toast.LENGTH_SHORT).show();
-            return;
-        }
 
         for(int z = 0; z<children; z++){
             FrameLayout fl = (FrameLayout) questionHolder.getChildAt(z);
@@ -194,6 +208,7 @@ public class EditQuiz extends AppCompatActivity {
         }
         i.putExtra("questionAmount", children);
         i.putExtra("quizName", title.getText().toString());
+        i.putExtra("originalQuizName", originalQuizName);
         setResult(QuizSelect.GOOD, i);
         finish();
     }

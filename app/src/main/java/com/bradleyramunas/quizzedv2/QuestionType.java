@@ -8,5 +8,6 @@ public interface QuestionType {
     public String getQuestionText();
 
     public String getAnswerText();
-    
+
+    public boolean checkAnswer();
 }

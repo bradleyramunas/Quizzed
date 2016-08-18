@@ -72,7 +72,7 @@ public class FragmentCreateFRQ extends Fragment {
             q.setHint("Question");
             a.setHint("Answer");
             q.setText(questionText);
-            a.setHint(answerText);
+            a.setText(answerText);
         }else{
             q.setHint(questionText);
             a.setHint(answerText);

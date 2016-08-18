@@ -31,6 +31,8 @@ public class TraditionalQuiz extends AppCompatActivity {
     private int currentIndex = 0;
     private int maxIndex;
 
+    private boolean clickEnabled = true;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,7 +44,7 @@ public class TraditionalQuiz extends AppCompatActivity {
         next = (Button) findViewById(R.id.buttonNext);
         back = (Button) findViewById(R.id.buttonBack);
 
-        back.setEnabled(false);
+
 
         Intent i = getIntent();
         int amount = i.getIntExtra("questionAmount", 0);
@@ -55,15 +57,17 @@ public class TraditionalQuiz extends AppCompatActivity {
             boolean type = question.getBoolean("questionType");
             if(type){
                 Fragment frq = FragmentFRQ.newInstance(question.getString("questionText"), question.getString("answerText"));
-                questions.add(frq);
+
             }else{
                 Fragment mcq = FragmentMCQ.newInstance(question.getString("questionText"), question.getString("answerText"),
                         question.getString("optionOne"), question.getString("optionTwo"), question.getString("optionThree"), question.getString("optionFour"));
-                questions.add(mcq);
+
             }
         }
 
         maxIndex = questions.size()-1;
+
+        updateButtons();
 
         getSupportFragmentManager().beginTransaction().replace(fl.getId(), questions.get(0)).commit();
 
@@ -71,15 +75,26 @@ public class TraditionalQuiz extends AppCompatActivity {
     }
 
     public void onNextPress(View view){
-        currentIndex++;
-        updateButtons();
-        changeFragment(currentIndex);
+        if(clickEnabled){
+            clickEnabled = false;
+            currentIndex++;
+            next.setEnabled(false);
+            back.setEnabled(false);
+            changeFragment(currentIndex);
+
+        }
+
+
     }
 
     public void onBackPress(View view){
-        currentIndex--;
-        updateButtons();
-        changeFragment(currentIndex);
+        if(clickEnabled){
+            clickEnabled = false;
+            currentIndex--;
+            next.setEnabled(false);
+            back.setEnabled(false);
+            changeFragment(currentIndex);
+        }
     }
 
     private void updateButtons(){
@@ -102,27 +117,41 @@ public class TraditionalQuiz extends AppCompatActivity {
         Fragment f = questions.get(index);
 
         if(f.getClass() == FragmentFRQ.class){
-            Fragment old = getSupportFragmentManager().findFragmentById(fl.getId());
-            if(old != null && !old.isRemoving()){
-                FragmentFRQ t = (FragmentFRQ) f;
-                FragmentManager fm = getSupportFragmentManager();
-                FragmentTransaction ft = fm.beginTransaction();
-                ft.setCustomAnimations(R.anim.fadein, R.anim.fadeout, R.anim.fadein, R.anim.fadeout);
-                ft.replace(fl.getId(), t);
-                ft.commit();
-            }
+//            Fragment old = getSupportFragmentManager().findFragmentById(fl.getId());
+//            if(old != null && !old.isRemoving()){
+//                FragmentFRQ t = (FragmentFRQ) f;
+//                FragmentManager fm = getSupportFragmentManager();
+//                FragmentTransaction ft = fm.beginTransaction();
+//                ft.setCustomAnimations(R.anim.fadein, R.anim.fadeout, R.anim.fadein, R.anim.fadeout);
+//                ft.replace(fl.getId(), t);
+//                ft.commit();
+//            }
+            FragmentFRQ t = (FragmentFRQ) f;
+            FragmentManager fm = getSupportFragmentManager();
+            FragmentTransaction ft = fm.beginTransaction();
+            ft.setCustomAnimations(R.anim.fadein, R.anim.fadeout, R.anim.fadein, R.anim.fadeout);
+            ft.replace(fl.getId(), t);
+            ft.commit();
         }else{
-            Fragment old = getSupportFragmentManager().findFragmentById(fl.getId());
-            if(old != null && !old.isRemoving()){
-                FragmentMCQ t = (FragmentMCQ) f;
-                FragmentManager fm = getSupportFragmentManager();
-                FragmentTransaction ft = fm.beginTransaction();
-                ft.setCustomAnimations(R.anim.fadein, R.anim.fadeout, R.anim.fadein, R.anim.fadeout);
-                ft.replace(fl.getId(), t);
-                ft.commit();
-            }
+//            Fragment old = getSupportFragmentManager().findFragmentById(fl.getId());
+//            if(old != null && !old.isRemoving()){
+//                FragmentMCQ t = (FragmentMCQ) f;
+//                FragmentManager fm = getSupportFragmentManager();
+//                FragmentTransaction ft = fm.beginTransaction();
+//                ft.setCustomAnimations(R.anim.fadein, R.anim.fadeout, R.anim.fadein, R.anim.fadeout);
+//                ft.replace(fl.getId(), t);
+//                ft.commit();
+//            }
+            FragmentMCQ t = (FragmentMCQ) f;
+            FragmentManager fm = getSupportFragmentManager();
+            FragmentTransaction ft = fm.beginTransaction();
+            ft.setCustomAnimations(R.anim.fadein, R.anim.fadeout, R.anim.fadein, R.anim.fadeout);
+            ft.replace(fl.getId(), t);
+            ft.commit();
 
         }
+        updateButtons();
+        clickEnabled = true;
 
     }
 

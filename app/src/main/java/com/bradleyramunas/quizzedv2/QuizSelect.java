@@ -246,6 +246,35 @@ public class QuizSelect extends AppCompatActivity {
                 Toast.makeText(this, "ERROR", Toast.LENGTH_LONG).show();
             }
         }
+        if(requestCode == 2){
+            if(resultCode == GOOD){
+                ArrayList<Question> forQuiz = new ArrayList<>();
+                Bundle b = intent.getExtras();
+                int amount = b.getInt("questionAmount");
+                for(int i = 0; i<amount; i++){
+                    Bundle b2 = b.getBundle("bundle"+i);
+                    boolean type = b2.getBoolean("questionType");
+                    if(type){
+                        String questionText = b2.getString("questionText");
+                        String answerText   = b2.getString("answerText");
+                        forQuiz.add(new QuestionFRQ(questionText, answerText));
+                    }else{
+                        String questionText = b2.getString("questionText");
+                        String answerText   = b2.getString("answerText");
+                        String optionOne    = b2.getString("optionOne");
+                        String optionTwo    = b2.getString("optionTwo");
+                        String optionThree  = b2.getString("optionThree");
+                        String optionFour   = b2.getString("optionFour");
+                        forQuiz.add(new QuestionMCQ(questionText, optionOne, optionTwo, optionThree, optionFour, answerText));
+                    }
+                }
+                Quiz quiz = new Quiz(b.getString("quizName"));
+                quiz.setQuestionList(forQuiz);
+                db.deleteQuiz(b.getString("originalQuizName"));
+                db.addNewQuiz(quiz);
+                populateDrawer();
+            }
+        }
     }
 
     public void changeFragment(Fragment f){
