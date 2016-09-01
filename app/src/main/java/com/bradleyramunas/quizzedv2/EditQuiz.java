@@ -22,11 +22,13 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class EditQuiz extends AppCompatActivity {
 
-    private static final AtomicInteger sNextGeneratedId = new AtomicInteger(1);
+
 
     private Fragment lastDeleted = null;
     private int position = 0;
 
+
+    private static final AtomicInteger sNextGeneratedId = new AtomicInteger(1);
     public static int generateViewId() {
         for (;;) {
             final int result = sNextGeneratedId.get();

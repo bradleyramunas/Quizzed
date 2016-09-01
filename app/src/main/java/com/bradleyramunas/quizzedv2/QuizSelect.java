@@ -5,6 +5,7 @@ import android.app.Application;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -134,6 +135,7 @@ public class QuizSelect extends AppCompatActivity {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 PrimaryDrawerItem pdi = (PrimaryDrawerItem) drawer.getDrawerItem(id);
+                                deleteSharedPrefs(pdi.getName().toString());
                                 db.deleteQuiz(pdi.getName().toString());
                                 drawer.removeItem(id);
                                 dialog.cancel();
@@ -272,6 +274,7 @@ public class QuizSelect extends AppCompatActivity {
                 quiz.setQuestionList(forQuiz);
                 db.deleteQuiz(b.getString("originalQuizName"));
                 db.addNewQuiz(quiz);
+                updateSharedPrefs(b.getString("originalQuizName"), b.getString("quizName"));
                 populateDrawer();
             }
         }
@@ -281,4 +284,29 @@ public class QuizSelect extends AppCompatActivity {
         getSupportFragmentManager().beginTransaction().replace(fragmentHolder.getId(), f).setCustomAnimations(R.anim.fadein, R.anim.fadeout, R.anim.fadein, R.anim.fadeout).commit();
     }
 
+    public void deleteSharedPrefs(String quizName){
+        Context context = this;
+        SharedPreferences sharedPreferences = context.getSharedPreferences(getString(R.string.quiz_data_preferences_key), context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.remove(quizName + "_lastCompleted").apply();
+        editor.remove(quizName + "_amountCorrect").apply();
+        editor.remove(quizName + "_totalQuestions").apply();
+    }
+
+    public void updateSharedPrefs(String quizName, String newQuizName){
+        if(!quizName.equals(newQuizName)){
+            Context context = this;
+            SharedPreferences sharedPreferences = context.getSharedPreferences(getString(R.string.quiz_data_preferences_key), context.MODE_PRIVATE);
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            long lastCompleted = sharedPreferences.getLong(quizName + "_lastCompleted", 0);
+            int amountCorrect = sharedPreferences.getInt(quizName + "_amountCorrect", 0);
+            int totalQuestions = sharedPreferences.getInt(quizName + "_totalQuestions", 0);
+            editor.remove(quizName + "_lastCompleted").apply();
+            editor.remove(quizName + "_amountCorrect").apply();
+            editor.remove(quizName + "_totalQuestions").apply();
+            editor.putLong(newQuizName + "_lastCompleted", lastCompleted).apply();
+            editor.putInt(newQuizName + "_amountCorrect", amountCorrect).apply();
+            editor.putInt(newQuizName + "_totalQuestions", totalQuestions).apply();
+        }
+    }
 }

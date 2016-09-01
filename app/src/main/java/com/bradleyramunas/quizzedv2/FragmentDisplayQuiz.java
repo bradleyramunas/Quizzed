@@ -2,15 +2,20 @@ package com.bradleyramunas.quizzedv2;
 
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.CardView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.bradleyramunas.quizzedv2.LearningMethods.ListTraditionalQuiz;
 import com.bradleyramunas.quizzedv2.LearningMethods.TraditionalQuiz;
+
+import java.util.Date;
 
 
 public class FragmentDisplayQuiz extends Fragment {
@@ -44,7 +49,7 @@ public class FragmentDisplayQuiz extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_fragment_display_quiz, container, false);
-
+        SharedPreferences sharedPreferences = getActivity().getSharedPreferences(getString(R.string.quiz_data_preferences_key), getContext().MODE_PRIVATE);
         quizTitle               = (TextView) view.findViewById(R.id.quizTitle);
         questionAmount          = (TextView) view.findViewById(R.id.questionAmount);
         quizLastTaken           = (TextView) view.findViewById(R.id.quizLastTaken);
@@ -61,15 +66,17 @@ public class FragmentDisplayQuiz extends Fragment {
 
         methodOneTitle.setText("Quiz");
         methodOneDescription.setText("Take a traditional quiz");
-        //TODO: Setup sharedprefs and insert date strings of last taken...
-        //remember to setup sharedprefs on creation of each quiz and deletion after deleting
-        //methodOneLastTaken.setText(this.getActivity().getSharedPreferences());
+        String time = new Date(sharedPreferences.getLong(getArguments().getString("quizTitle") + "_lastCompleted", 0)).toString();
+        if(time.contains("1969")){
+            time = "Never";
+        }
+        methodOneLastTaken.setText("Last Taken On: " + time);
 
 
         quizCard.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(getActivity(), TraditionalQuiz.class);
+                Intent i = new Intent(getActivity(), ListTraditionalQuiz.class);
                 i.putExtra("quizName", quizTitle.getText().toString());
                 i.putExtra("questionAmount", quiz.getQuestionList().size());
                 int tagnum = 0;

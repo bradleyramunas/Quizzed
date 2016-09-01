@@ -24,7 +24,10 @@
         <activity
             android:name=".EditQuiz"
             android:windowSoftInputMode="stateHidden" />
-        <activity android:name=".LearningMethods.TraditionalQuiz"></activity>
+        <activity android:name=".LearningMethods.TraditionalQuiz" />
+        <activity
+            android:name=".LearningMethods.ListTraditionalQuiz"
+            android:windowSoftInputMode="stateHidden" />
     </application>
 
 </manifest>
