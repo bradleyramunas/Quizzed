@@ -112,7 +112,6 @@ public class TraditionalQuiz extends AppCompatActivity {
     }
 
 
-    //TODO: Fix crashing from switching between questions too often
     private void changeFragment(int index){
         Fragment f = questions.get(index);
 

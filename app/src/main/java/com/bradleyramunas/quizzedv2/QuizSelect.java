@@ -33,6 +33,7 @@ import com.mikepenz.materialdrawer.model.SectionDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -276,6 +277,14 @@ public class QuizSelect extends AppCompatActivity {
                 db.addNewQuiz(quiz);
                 updateSharedPrefs(b.getString("originalQuizName"), b.getString("quizName"));
                 populateDrawer();
+            }
+        }
+        if(requestCode == 10){
+            if(resultCode == GOOD){
+                String quizName = intent.getStringExtra("quizName");
+                Quiz quiz = db.getQuizFromDatabase(quizName);
+                FragmentDisplayQuiz fdq = FragmentDisplayQuiz.createInstance(quizName, quiz.getQuestionList().size(), new Date(this.getSharedPreferences(getString(R.string.quiz_data_preferences_key), Context.MODE_PRIVATE).getLong(quizName+"_lastCompleted", 0)).toString());
+                changeFragment(fdq);
             }
         }
     }

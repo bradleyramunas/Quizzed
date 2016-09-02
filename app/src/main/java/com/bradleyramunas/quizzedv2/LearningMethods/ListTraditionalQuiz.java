@@ -90,7 +90,7 @@ public class ListTraditionalQuiz extends AppCompatActivity {
         }
 
     }
-
+//TODO: Show results on finish or something
     public void onCheckQuizPress(View view){
         int amountCorrect = 0;
         int questionAmount = ll.getChildCount()-1;
@@ -100,9 +100,11 @@ public class ListTraditionalQuiz extends AppCompatActivity {
             FrameLayout fl = (FrameLayout) ll.getChildAt(i);
             Fragment f = getSupportFragmentManager().findFragmentById(fl.getId());
             if(f.getClass() == FragmentMCQ.class){
-
+                FragmentMCQ fragmentMCQ = (FragmentMCQ) f;
+                if(fragmentMCQ.checkAnswer()) amountCorrect++;
             }else if(f.getClass() == FragmentFRQ.class){
-
+                FragmentFRQ fragmentFRQ = (FragmentFRQ) f;
+                if(fragmentFRQ.checkAnswer()) amountCorrect++;
             }
         }
         Date date = new Date();
@@ -113,7 +115,10 @@ public class ListTraditionalQuiz extends AppCompatActivity {
         editor.putInt(quizName + "_amountCorrect", amountCorrect).apply();
         editor.putInt(quizName + "_totalQuestions", questionAmount).apply();
 
-        setResult(QuizSelect.GOOD);
+        Intent i = new Intent();
+        i.putExtra("quizName", quizName);
+        setResult(QuizSelect.GOOD, i);
         finish();
     }
+
 }
