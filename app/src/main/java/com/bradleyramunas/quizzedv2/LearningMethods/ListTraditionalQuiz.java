@@ -1,13 +1,16 @@
 package com.bradleyramunas.quizzedv2.LearningMethods;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 
@@ -37,8 +40,9 @@ public class ListTraditionalQuiz extends AppCompatActivity {
         }
     }
 
-    LinearLayout ll;
-    String quizName;
+    private LinearLayout ll;
+    private String quizName;
+    private Button finishQuiz;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,6 +52,7 @@ public class ListTraditionalQuiz extends AppCompatActivity {
         Intent i = getIntent();
         ll = (LinearLayout) findViewById(R.id.fragmentListHolder);
         quizName = i.getStringExtra("quizName");
+        finishQuiz = (Button) findViewById(R.id.checkAnswers);
 
         int amount = i.getIntExtra("questionAmount", 0);
 
@@ -90,7 +95,12 @@ public class ListTraditionalQuiz extends AppCompatActivity {
         }
 
     }
-//TODO: Show results on finish or something
+
+    @Override
+    public void onBackPressed(){
+        finish();
+    }
+
     public void onCheckQuizPress(View view){
         int amountCorrect = 0;
         int questionAmount = ll.getChildCount()-1;
@@ -118,7 +128,26 @@ public class ListTraditionalQuiz extends AppCompatActivity {
         Intent i = new Intent();
         i.putExtra("quizName", quizName);
         setResult(QuizSelect.GOOD, i);
-        finish();
+
+        ll.removeView(finishQuiz);
+
+        new AlertDialog.Builder(this)
+                .setTitle("Quiz Completed!")
+                .setMessage("You scored " + amountCorrect + " out of " + questionAmount + " questions correct!\nWould you like to review your quiz?")
+                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                    }
+                })
+                .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                        finish();
+                    }
+                })
+                .show();
     }
 
 }

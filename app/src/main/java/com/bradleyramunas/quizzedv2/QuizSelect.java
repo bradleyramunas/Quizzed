@@ -2,10 +2,13 @@ package com.bradleyramunas.quizzedv2;
 
 import android.app.Activity;
 import android.app.Application;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -23,6 +26,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bradleyramunas.quizzedv2.MiscActivities.AboutScreen;
 import com.mikepenz.materialdrawer.AccountHeader;
 import com.mikepenz.materialdrawer.AccountHeaderBuilder;
 import com.mikepenz.materialdrawer.Drawer;
@@ -36,6 +40,22 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
+
+
+
+//TODO: Create home page activity, first launch stuff via shared prefs
+//TODO: Make the check and x symbols next to quiz cards after checking look better
+//TODO: Somehow indicate which option from mcq is correct
+//TODO: make all radio buttons disabled? maybe? no point in having them enabled
+//TODO: fix thing so it shows last taken without needing to switch thingies
+//TODO: add last reviewed under quiz title in quiz view
+//TODO: if edit or delete quiz, either change which quiz is being show or go back to home screen?
+//TODO: finish the header drawable for the drawer
+//TODO: Remove any debugging
+//TODO: Add MIT copyright
+//TODO: Update github website thingie
+//TODO: MAYBE: rewrite quiz to make parceable and then delete all repeated code
+//TODO: MAYBE: put all code to put quiz into bundle in some place and then another function to return quiz from bundle
 
 public class QuizSelect extends AppCompatActivity {
 
@@ -207,6 +227,51 @@ public class QuizSelect extends AppCompatActivity {
     }
 
     @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle item selection
+        switch (item.getItemId()) {
+            case R.id.about:
+                Intent i = new Intent(this, AboutScreen.class);
+                startActivity(i);
+                return true;
+//            case -300:
+//                Dialog dialog;
+//                final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+//                builder.setTitle("Choose a color scheme");
+//                final CharSequence[] items = {"Red", "Light Blue", "Dark Blue", "Dark Green", "Gray"};
+//                int inputSelection = 0;
+//                builder.setSingleChoiceItems(items, inputSelection, new DialogInterface.OnClickListener() {
+//                    @Override
+//                    public void onClick(DialogInterface dialog, int which) {
+//                        switch (which){
+//                            case 0:
+//                                changeTitleBarColor(0);
+//                                break;
+//                            case 1:
+//                                changeTitleBarColor(1);
+//                                break;
+//                            case 2:
+//                                changeTitleBarColor(2);
+//                                break;
+//                            case 3:
+//                                changeTitleBarColor(3);
+//                                break;
+//                            case 4:
+//                                changeTitleBarColor(4);
+//                                break;
+//                        }
+//                        dialog.dismiss();
+//                    }
+//                });
+//                dialog = builder.create();
+//                dialog.show();
+//                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    @Override
     public void onActivityResult(int requestCode, int resultCode, Intent intent){
         if(requestCode == 1){
             if(resultCode == GOOD){
@@ -316,6 +381,26 @@ public class QuizSelect extends AppCompatActivity {
             editor.putLong(newQuizName + "_lastCompleted", lastCompleted).apply();
             editor.putInt(newQuizName + "_amountCorrect", amountCorrect).apply();
             editor.putInt(newQuizName + "_totalQuestions", totalQuestions).apply();
+        }
+    }
+
+    public void changeTitleBarColor(int colorChoice){
+        switch (colorChoice){
+            case 0:
+                getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#E53935")));
+                break;
+            case 1:
+                getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#2196F3")));
+                break;
+            case 2:
+                getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#283593")));
+                break;
+            case 3:
+                getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#2E7D32")));
+                break;
+            case 4:
+                getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#757575")));
+                break;
         }
     }
 }

@@ -11,7 +11,7 @@
     <android.support.v7.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/view3"
+        android:id="@+id/questionCardView"
         card_view:cardUseCompatPadding="true"
         android:layout_marginBottom="8dp">
 
@@ -22,14 +22,25 @@
             android:layout_height="match_parent"
             android:padding="16dp">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAppearance="@style/Base.TextAppearance.AppCompat.Body1"
-                android:text="Question Text"
-                android:id="@+id/questionText"
-                android:textSize="18dp"
-                android:layout_marginBottom="8dp" />
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/checkResult" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Body1"
+                    android:text="Question Text"
+                    android:id="@+id/questionText"
+                    android:textSize="18dp"
+                    android:layout_marginBottom="8dp" />
+            </LinearLayout>
 
             <RadioGroup
                 android:layout_width="match_parent"

@@ -1,12 +1,15 @@
 package com.bradleyramunas.quizzedv2;
 
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.CardView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import org.w3c.dom.Text;
@@ -22,6 +25,10 @@ public class FragmentFRQ extends Fragment implements QuestionType{
 
     private TextView questionT;
     private EditText answerT;
+
+    private ImageView checkResult;
+
+    private CardView questionCardView;
 
     public FragmentFRQ() {
         // Required empty public constructor
@@ -56,6 +63,9 @@ public class FragmentFRQ extends Fragment implements QuestionType{
 
         questionT = (TextView) view.findViewById(R.id.questionText);
         answerT   = (EditText) view.findViewById(R.id.userAnswer);
+        questionCardView = (CardView) view.findViewById(R.id.questionCardView);
+
+        checkResult = (ImageView) view.findViewById(R.id.checkResult);
 
         questionT.setText(questionText);
 
@@ -73,6 +83,15 @@ public class FragmentFRQ extends Fragment implements QuestionType{
     }
 
     public boolean checkAnswer(){
-        return answerT.getText().toString().equals(answerText);
+        boolean check = answerT.getText().toString().equals(answerText);
+        if(check){
+            //questionCardView.setBackgroundColor(Color.parseColor("#43A047"));
+            checkResult.setImageResource(R.drawable.ic_done_black_24dp);
+        }
+        else{
+           //questionCardView.setBackgroundColor(Color.parseColor("#E53935"));
+            checkResult.setImageResource(R.drawable.ic_clear_20dp);
+        }
+        return check;
     }
 }
