@@ -73,7 +73,7 @@ public class ListTraditionalQuiz extends AppCompatActivity {
             }
         }
 
-        getSupportActionBar().setTitle(i.getStringExtra(quizName));
+        getSupportActionBar().setTitle(quizName);
 
         for(Fragment f : questionList){
             if(f.getClass() == FragmentFRQ.class){

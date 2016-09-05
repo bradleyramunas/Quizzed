@@ -28,7 +28,8 @@
         <activity
             android:name=".LearningMethods.ListTraditionalQuiz"
             android:windowSoftInputMode="stateHidden" />
-        <activity android:name=".MiscActivities.AboutScreen"></activity>
+        <activity android:name=".MiscActivities.AboutScreen"
+            android:parentActivityName="com.bradleyramunas.quizzedv2.QuizSelect"></activity>
     </application>
 
 </manifest>

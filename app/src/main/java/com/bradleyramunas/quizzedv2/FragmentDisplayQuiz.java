@@ -67,7 +67,7 @@ public class FragmentDisplayQuiz extends Fragment {
         methodOneTitle.setText("Quiz");
         methodOneDescription.setText("Take a traditional quiz");
         String time = new Date(sharedPreferences.getLong(getArguments().getString("quizTitle") + "_lastCompleted", 0)).toString();
-        if(time.contains("1969")){
+        if(time.contains("1969") || time.contains("1970")){
             time = "Never";
         }
         methodOneLastTaken.setText("Last Taken On: " + time);
@@ -79,8 +79,8 @@ public class FragmentDisplayQuiz extends Fragment {
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(getActivity(), ListTraditionalQuiz.class);
-                i.putExtra("quizName", quizTitle.getText().toString());
-                i.putExtra("questionAmount", quiz.getQuestionList().size());
+                i.putExtra("quizName", getArguments().getString("quizTitle"));
+                i.putExtra("questionAmount", getArguments().getInt("questionAmount"));
                 int tagnum = 0;
                 for(Question q : quiz.getQuestionList()){
                     Bundle b = new Bundle();
@@ -118,6 +118,16 @@ public class FragmentDisplayQuiz extends Fragment {
         }
         methodOneLastTaken.setText("Last Taken On: " + time);
         quizLastTaken.setText("Last Reviewed On: " + time);
+    }
+
+    public void updateEntireQuiz(String newTitle, int newQuestionAmount){
+        getArguments().putString("quizTitle", newTitle);
+        getArguments().putInt("questionAmount", newQuestionAmount);
+        quizTitle.setText(getArguments().getString("quizTitle"));
+        questionAmount.setText(getArguments().getInt("questionAmount") + " Questions");
+        quiz = db.getQuizFromDatabase(getArguments().getString("quizTitle"));
+        updateLastTaken();
+
     }
 
 

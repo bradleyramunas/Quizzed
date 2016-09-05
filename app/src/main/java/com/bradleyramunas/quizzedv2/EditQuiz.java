@@ -104,7 +104,7 @@ public class EditQuiz extends AppCompatActivity {
     public void onBackPressed(){
         new AlertDialog.Builder(this)
                 .setTitle("Cancel editing quiz")
-                .setMessage("Are you sure you want to cancel? No changes will be made")
+                .setMessage("Are you sure you want to cancel? No changes will be made.")
                 .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {

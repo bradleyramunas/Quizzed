@@ -43,13 +43,8 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 
 
-//TODO: Create home page activity, first launch stuff via shared prefs
-//TODO: add last reviewed under quiz title in quiz view
-//TODO: if edit or delete quiz, either change which quiz is being show or go back to home screen?
 //TODO: Add MIT copyright
 //TODO: Update github website thingie
-//TODO: MAYBE: rewrite quiz to make parceable and then delete all repeated code
-//TODO: MAYBE: put all code to put quiz into bundle in some place and then another function to return quiz from bundle
 
 public class QuizSelect extends AppCompatActivity {
 
@@ -59,7 +54,6 @@ public class QuizSelect extends AppCompatActivity {
 
     public static final AtomicInteger identifier = new AtomicInteger(0);
 
-    //How am i supposed to tell what view i long pressed when i am in the onContextItemSelected method?
     private long id = -1;
 
     //RESULTCODES
@@ -102,6 +96,10 @@ public class QuizSelect extends AppCompatActivity {
                         }else if(i.getTag() != null && i.getTag().equals("add")){
                             drawer.closeDrawer();
                             startActivityForResult(intent, 1);
+                        }else if(i.getTag() != null && i.getTag().equals("home")){
+                            drawer.closeDrawer();
+                            FragmentHomeScreen homeScreen = new FragmentHomeScreen();
+                            changeFragment(homeScreen);
                         }
 
 
@@ -126,6 +124,8 @@ public class QuizSelect extends AppCompatActivity {
                 })
                 .build();
         populateDrawer();
+        FragmentHomeScreen homeScreen = new FragmentHomeScreen();
+        changeFragment(homeScreen);
 
     }
 
@@ -206,7 +206,7 @@ public class QuizSelect extends AppCompatActivity {
         drawer.removeAllItems();
         drawer.removeAllStickyFooterItems();
 
-        drawer.addItem(new PrimaryDrawerItem().withName("Home").withIcon(R.drawable.ic_home_black_24dp));
+        drawer.addItem(new PrimaryDrawerItem().withName("Home").withIcon(R.drawable.ic_home_black_24dp).withTag("home"));
         drawer.addItem(new SectionDrawerItem().withName("My Quizzes"));
         ArrayList<String> names = db.getQuizNames();
         for(String s : names){
@@ -272,6 +272,7 @@ public class QuizSelect extends AppCompatActivity {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent intent){
         if(requestCode == 1){
+
             if(resultCode == GOOD){
 
                 //Toast.makeText(this, "GOOD", Toast.LENGTH_LONG).show();
@@ -305,15 +306,16 @@ public class QuizSelect extends AppCompatActivity {
                 populateDrawer();
 
             }else if(resultCode == EMPTY){
-                Toast.makeText(this, "EMPTY", Toast.LENGTH_LONG).show();
+
             }else if(resultCode == CANCELED){
-                Toast.makeText(this, "CANCELED", Toast.LENGTH_LONG).show();
+
             }else{
-                Toast.makeText(this, "ERROR", Toast.LENGTH_LONG).show();
+
             }
         }
         if(requestCode == 2){
             if(resultCode == GOOD){
+
                 ArrayList<Question> forQuiz = new ArrayList<>();
                 Bundle b = intent.getExtras();
                 int amount = b.getInt("questionAmount");
@@ -340,6 +342,11 @@ public class QuizSelect extends AppCompatActivity {
                 db.addNewQuiz(quiz);
                 updateSharedPrefs(b.getString("originalQuizName"), b.getString("quizName"));
                 populateDrawer();
+
+                FragmentDisplayQuiz fragmentDisplayQuiz = (FragmentDisplayQuiz) getSupportFragmentManager().findFragmentById(fragmentHolder.getId());
+                fragmentDisplayQuiz.updateEntireQuiz(b.get("quizName").toString(), amount);
+
+
             }
         }
         if(requestCode == 10){
@@ -398,5 +405,14 @@ public class QuizSelect extends AppCompatActivity {
                 getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#757575")));
                 break;
         }
+    }
+
+    public void onViewQuizzesSelect(View view){
+        drawer.openDrawer();
+    }
+
+    public void onAddQuizSelect(View view){
+        Intent i = new Intent(this, NewQuiz.class);
+        startActivityForResult(i, 1);
     }
 }

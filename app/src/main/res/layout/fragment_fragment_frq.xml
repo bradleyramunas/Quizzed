@@ -5,7 +5,6 @@
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
     tools:context="com.bradleyramunas.quizzedv2.FragmentFRQ">
 
-    <!-- TODO: Update blank fragment layout -->
 
 
     <android.support.v7.widget.CardView
