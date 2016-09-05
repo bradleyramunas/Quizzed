@@ -154,6 +154,10 @@ public class QuizSelect extends AppCompatActivity {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 PrimaryDrawerItem pdi = (PrimaryDrawerItem) drawer.getDrawerItem(id);
+                                if(pdi.isSelected()){
+                                    FragmentHomeScreen homeScreen = new FragmentHomeScreen();
+                                    changeFragment(homeScreen);
+                                }
                                 deleteSharedPrefs(pdi.getName().toString());
                                 db.deleteQuiz(pdi.getName().toString());
                                 drawer.removeItem(id);
