@@ -1,12 +1,15 @@
 package com.bradleyramunas.quizzedv2;
 
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import java.util.ArrayList;
 
 /**
  * Created by Bradley on 8/4/2016.
  */
-public class Quiz {
+public class Quiz implements Parcelable {
 
     private ArrayList<Question> questionList;
     private String name;
@@ -44,4 +47,43 @@ public class Quiz {
         return false;
     }
 
+
+    protected Quiz(Parcel in) {
+        if (in.readByte() == 0x01) {
+            questionList = new ArrayList<Question>();
+            in.readList(questionList, Question.class.getClassLoader());
+        } else {
+            questionList = null;
+        }
+        name = in.readString();
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        if (questionList == null) {
+            dest.writeByte((byte) (0x00));
+        } else {
+            dest.writeByte((byte) (0x01));
+            dest.writeList(questionList);
+        }
+        dest.writeString(name);
+    }
+
+    @SuppressWarnings("unused")
+    public static final Parcelable.Creator<Quiz> CREATOR = new Parcelable.Creator<Quiz>() {
+        @Override
+        public Quiz createFromParcel(Parcel in) {
+            return new Quiz(in);
+        }
+
+        @Override
+        public Quiz[] newArray(int size) {
+            return new Quiz[size];
+        }
+    };
 }

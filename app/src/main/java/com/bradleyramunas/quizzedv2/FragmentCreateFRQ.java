@@ -99,4 +99,8 @@ public class FragmentCreateFRQ extends Fragment {
         return true;
     }
 
+    public QuestionFRQ getQuestion(){
+        return new QuestionFRQ(getQuestionText(), getAnswerText());
+    }
+
 }

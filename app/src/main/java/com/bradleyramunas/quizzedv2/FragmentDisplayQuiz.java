@@ -81,27 +81,7 @@ public class FragmentDisplayQuiz extends Fragment {
                 Intent i = new Intent(getActivity(), ListTraditionalQuiz.class);
                 i.putExtra("quizName", getArguments().getString("quizTitle"));
                 i.putExtra("questionAmount", getArguments().getInt("questionAmount"));
-                int tagnum = 0;
-                for(Question q : quiz.getQuestionList()){
-                    Bundle b = new Bundle();
-                    if(q.getClass() == QuestionFRQ.class){
-                        QuestionFRQ frq = (QuestionFRQ) q;
-                        b.putString("questionText", frq.get_questionText());
-                        b.putString("answerText", frq.get_answerText());
-                        b.putBoolean("questionType", true);
-                    }else{
-                        QuestionMCQ mcq = (QuestionMCQ) q;
-                        b.putString("questionText", mcq.get_questionText());
-                        b.putString("answerText", mcq.get_answerText());
-                        b.putString("optionOne", mcq.get_optionOne());
-                        b.putString("optionTwo", mcq.get_optionTwo());
-                        b.putString("optionThree", mcq.get_optionThree());
-                        b.putString("optionFour", mcq.get_optionFour());
-                        b.putBoolean("questionType", false);
-                    }
-                    i.putExtra("bundle"+tagnum, b);
-                    tagnum++;
-                }
+                i.putExtra("quiz", quiz);
                 getActivity().startActivityForResult(i, 10);
 
             }

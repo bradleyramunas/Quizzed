@@ -2,6 +2,7 @@ package com.bradleyramunas.quizzedv2;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -9,7 +10,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
@@ -125,33 +125,19 @@ public class NewQuiz extends AppCompatActivity {
         }
 
 
-        //tfw u hate parceables so u just make bundles with a bunch of extras lol
         Intent i = new Intent();
-        String tag = "bundle";
+        Quiz quiz = new Quiz(title.getText().toString());
+
         for(int z = 0; z<children; z++){
-            Bundle b = new Bundle();
             FrameLayout fl = (FrameLayout) questionHolder.getChildAt(z);
-
             Fragment f = getSupportFragmentManager().findFragmentById(fl.getId());
-            //mcq = false, frq = true
-            if(f.getClass().getName().equals("com.bradleyramunas.quizzedv2.FragmentCreateFRQ")){
-                FragmentCreateFRQ frq = (FragmentCreateFRQ) f;
-                b.putBoolean("questionType", true);
-                b.putString("questionText", frq.getQuestionText());
-                b.putString("answerText", frq.getAnswerText());
-            }else{
-                FragmentCreateMCQ mcq = (FragmentCreateMCQ) f;
-                b.putBoolean("questionType", false);
-                b.putString("questionText", mcq.getQuestionText());
-                b.putString("answerText", mcq.getAnswerText());
-                b.putString("optionOne", mcq.getOptionOne());
-                b.putString("optionTwo", mcq.getOptionTwo());
-                b.putString("optionThree", mcq.getOptionThree());
-                b.putString("optionFour", mcq.getOptionFour());
-
+            if(f instanceof FragmentCreateFRQ){
+                quiz.addQuestion(((FragmentCreateFRQ) f).getQuestion());
+            }else if(f instanceof FragmentCreateMCQ){
+                quiz.addQuestion(((FragmentCreateMCQ) f).getQuestion());
             }
-            i.putExtra(tag+z, b);
         }
+        i.putExtra("quiz", quiz);
         i.putExtra("questionAmount", children);
         i.putExtra("quizName", title.getText().toString());
         setResult(QuizSelect.GOOD, i);

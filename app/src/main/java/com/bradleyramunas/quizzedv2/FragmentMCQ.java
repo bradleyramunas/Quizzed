@@ -52,6 +52,19 @@ public class FragmentMCQ extends Fragment implements QuestionType{
         return fragment;
     }
 
+    public static FragmentMCQ newInstance(QuestionMCQ questionMCQ){
+        FragmentMCQ fragment = new FragmentMCQ();
+        Bundle args = new Bundle();
+        args.putString("questionText", questionMCQ.get_questionText());
+        args.putString("answerText", questionMCQ.get_answerText());
+        args.putString("optionOne", questionMCQ.get_optionOne());
+        args.putString("optionTwo", questionMCQ.get_optionTwo());
+        args.putString("optionThree", questionMCQ.get_optionThree());
+        args.putString("optionFour", questionMCQ.get_optionFour());
+        fragment.setArguments(args);
+        return fragment;
+    }
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {

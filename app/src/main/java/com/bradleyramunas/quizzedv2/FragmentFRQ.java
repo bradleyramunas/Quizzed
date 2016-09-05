@@ -47,6 +47,15 @@ public class FragmentFRQ extends Fragment implements QuestionType{
         return fragment;
     }
 
+    public static FragmentFRQ newInstance(QuestionFRQ questionFRQ){
+        FragmentFRQ fragment = new FragmentFRQ();
+        Bundle args = new Bundle();
+        args.putString("questionText", questionFRQ.get_questionText());
+        args.putString("answerText", questionFRQ.get_answerText());
+        fragment.setArguments(args);
+        return fragment;
+    }
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {

@@ -18,18 +18,16 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".NewQuiz"
-            android:windowSoftInputMode="stateHidden" />
-        <activity
-            android:name=".EditQuiz"
-            android:windowSoftInputMode="stateHidden" />
         <activity android:name=".LearningMethods.TraditionalQuiz" />
         <activity
             android:name=".LearningMethods.ListTraditionalQuiz"
             android:windowSoftInputMode="stateHidden" />
         <activity android:name=".MiscActivities.AboutScreen"
             android:parentActivityName="com.bradleyramunas.quizzedv2.QuizSelect"></activity>
+        <activity android:name=".EditQuiz"
+            android:windowSoftInputMode="stateHidden"/>
+        <activity android:name=".NewQuiz"
+            android:windowSoftInputMode="stateHidden" />
     </application>
 
 </manifest>

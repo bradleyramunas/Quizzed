@@ -176,4 +176,8 @@ public class FragmentCreateMCQ extends Fragment {
         }
         return false;
     }
+
+    public QuestionMCQ getQuestion(){
+        return new QuestionMCQ(getQuestionText(), getOptionOne(), getOptionTwo(), getOptionThree(), getOptionFour(), getAnswerText());
+    }
 }

@@ -1,9 +1,12 @@
 package com.bradleyramunas.quizzedv2;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 /**
  * Created by Bradley on 8/4/2016.
  */
-public class QuestionMCQ extends Question{
+public class QuestionMCQ extends Question implements Parcelable {
 
     private String _questionText;
     private String _optionOne;
@@ -71,5 +74,47 @@ public class QuestionMCQ extends Question{
 
     public void set_answerText(String _answerText) {
         this._answerText = _answerText;
+    }
+
+    protected QuestionMCQ(Parcel in) {
+        _questionText = in.readString();
+        _optionOne = in.readString();
+        _optionTwo = in.readString();
+        _optionThree = in.readString();
+        _optionFour = in.readString();
+        _answerText = in.readString();
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(_questionText);
+        dest.writeString(_optionOne);
+        dest.writeString(_optionTwo);
+        dest.writeString(_optionThree);
+        dest.writeString(_optionFour);
+        dest.writeString(_answerText);
+    }
+
+    @SuppressWarnings("unused")
+    public static final Parcelable.Creator<QuestionMCQ> CREATOR = new Parcelable.Creator<QuestionMCQ>() {
+        @Override
+        public QuestionMCQ createFromParcel(Parcel in) {
+            return new QuestionMCQ(in);
+        }
+
+        @Override
+        public QuestionMCQ[] newArray(int size) {
+            return new QuestionMCQ[size];
+        }
+    };
+
+    @Override
+    public String toString(){
+        return "QuestionMCQ, q is " + _questionText + ", answer is " + _answerText;
     }
 }

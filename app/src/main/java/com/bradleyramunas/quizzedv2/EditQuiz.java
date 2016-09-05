@@ -2,6 +2,7 @@ package com.bradleyramunas.quizzedv2;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -9,13 +10,19 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.Toast;
+
+import com.bradleyramunas.quizzedv2.FragmentCreateFRQ;
+import com.bradleyramunas.quizzedv2.FragmentCreateMCQ;
+import com.bradleyramunas.quizzedv2.MyDBHandler;
+import com.bradleyramunas.quizzedv2.Quiz;
+import com.bradleyramunas.quizzedv2.QuizSelect;
+import com.bradleyramunas.quizzedv2.R;
 
 import java.util.ArrayList;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -62,17 +69,13 @@ public class EditQuiz extends AppCompatActivity {
         db = new MyDBHandler(this, null);
 
         Intent i = getIntent();
-        int amount = i.getIntExtra("questionAmount", 0);
-        title.setText(i.getStringExtra("originalQuizName"));
-        originalQuizName = i.getStringExtra("originalQuizName");
+        Quiz quiz = i.getParcelableExtra("quiz");
+        originalQuizName = quiz.getName();
+        title.setText(originalQuizName);
 
-
-        for(int z = 0; z<amount; z++){
-            //mcq = false, frq = true
-            Bundle question = i.getBundleExtra("bundle"+z);
-            boolean type = question.getBoolean("questionType");
-            if(type){
-                FragmentCreateFRQ frq = FragmentCreateFRQ.newCustomInstance(question.getString("questionText"), question.getString("answerText"));
+        for(Question q : quiz.getQuestionList()){
+            if(q instanceof QuestionFRQ){
+                FragmentCreateFRQ frq = FragmentCreateFRQ.newCustomInstance(((QuestionFRQ) q).get_questionText(), ((QuestionFRQ) q).get_answerText());
                 FrameLayout fl = new FrameLayout(this);
                 fl.setLayoutParams(new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.WRAP_CONTENT));
                 int id = generateViewId();
@@ -82,13 +85,13 @@ public class EditQuiz extends AppCompatActivity {
                 ft.setCustomAnimations(R.anim.fadein, R.anim.fadeout, R.anim.fadein, R.anim.fadeout);
                 ft.replace(id, frq);
                 ft.commit();
-            }else{
-                FragmentCreateMCQ mcq = FragmentCreateMCQ.newCustomInstance(question.getString("questionText"), question.getString("answerText"),
-                        question.getString("optionOne"), question.getString("optionTwo"), question.getString("optionThree"), question.getString("optionFour"));
+            }else if(q instanceof QuestionMCQ){
+                FragmentCreateMCQ mcq = FragmentCreateMCQ.newCustomInstance(((QuestionMCQ) q).get_questionText(), ((QuestionMCQ) q).get_answerText(),
+                        ((QuestionMCQ) q).get_optionOne(), ((QuestionMCQ) q).get_optionTwo(), ((QuestionMCQ) q).get_optionThree(),
+                        ((QuestionMCQ) q).get_optionFour());
                 FrameLayout fl = new FrameLayout(this);
                 fl.setLayoutParams(new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.WRAP_CONTENT));
                 int id = generateViewId();
-                //Log.e("TEST", "" + id);
                 fl.setId(id);
                 questionHolder.addView(fl);
                 FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
@@ -97,7 +100,6 @@ public class EditQuiz extends AppCompatActivity {
                 ft.commit();
             }
         }
-
     }
 
     @Override
@@ -183,34 +185,20 @@ public class EditQuiz extends AppCompatActivity {
             }
         }
 
-
-        //tfw u hate parceables so u just make bundles with a bunch of extras lol
         Intent i = new Intent();
-        String tag = "bundle";
+
+        Quiz quiz = new Quiz(title.getText().toString());
+
         for(int z = 0; z<children; z++){
-            Bundle b = new Bundle();
             FrameLayout fl = (FrameLayout) questionHolder.getChildAt(z);
-
             Fragment f = getSupportFragmentManager().findFragmentById(fl.getId());
-            //mcq = false, frq = true
-            if(f.getClass().getName().equals("com.bradleyramunas.quizzedv2.FragmentCreateFRQ")){
-                FragmentCreateFRQ frq = (FragmentCreateFRQ) f;
-                b.putBoolean("questionType", true);
-                b.putString("questionText", frq.getQuestionText());
-                b.putString("answerText", frq.getAnswerText());
-            }else{
-                FragmentCreateMCQ mcq = (FragmentCreateMCQ) f;
-                b.putBoolean("questionType", false);
-                b.putString("questionText", mcq.getQuestionText());
-                b.putString("answerText", mcq.getAnswerText());
-                b.putString("optionOne", mcq.getOptionOne());
-                b.putString("optionTwo", mcq.getOptionTwo());
-                b.putString("optionThree", mcq.getOptionThree());
-                b.putString("optionFour", mcq.getOptionFour());
-
+            if(f instanceof FragmentCreateFRQ){
+                quiz.addQuestion(((FragmentCreateFRQ) f).getQuestion());
+            }else if(f instanceof FragmentCreateMCQ){
+                quiz.addQuestion(((FragmentCreateMCQ) f).getQuestion());
             }
-            i.putExtra(tag+z, b);
         }
+        i.putExtra("quiz", quiz);
         i.putExtra("questionAmount", children);
         i.putExtra("quizName", title.getText().toString());
         i.putExtra("originalQuizName", originalQuizName);

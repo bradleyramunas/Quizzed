@@ -16,7 +16,11 @@ import android.widget.LinearLayout;
 
 import com.bradleyramunas.quizzedv2.FragmentFRQ;
 import com.bradleyramunas.quizzedv2.FragmentMCQ;
+import com.bradleyramunas.quizzedv2.Question;
+import com.bradleyramunas.quizzedv2.QuestionFRQ;
+import com.bradleyramunas.quizzedv2.QuestionMCQ;
 import com.bradleyramunas.quizzedv2.QuestionType;
+import com.bradleyramunas.quizzedv2.Quiz;
 import com.bradleyramunas.quizzedv2.QuizSelect;
 import com.bradleyramunas.quizzedv2.R;
 
@@ -55,21 +59,17 @@ public class ListTraditionalQuiz extends AppCompatActivity {
         quizName = i.getStringExtra("quizName");
         finishQuiz = (Button) findViewById(R.id.checkAnswers);
 
-        int amount = i.getIntExtra("questionAmount", 0);
 
         ArrayList<Fragment> questionList = new ArrayList<>();
 
-        for(int z = 0; z<amount; z++){
-            //mcq = false, frq = true
-            Bundle question = i.getBundleExtra("bundle"+z);
-            boolean type = question.getBoolean("questionType");
-            if(type){
-                Fragment frq = FragmentFRQ.newInstance(question.getString("questionText"), question.getString("answerText"));
-                questionList.add(frq);
-            }else{
-                Fragment mcq = FragmentMCQ.newInstance(question.getString("questionText"), question.getString("answerText"),
-                        question.getString("optionOne"), question.getString("optionTwo"), question.getString("optionThree"), question.getString("optionFour"));
-                questionList.add(mcq);
+        Quiz quiz = i.getParcelableExtra("quiz");
+        for(Question q : quiz.getQuestionList()){
+            if(q instanceof QuestionFRQ){
+                Fragment fragment = FragmentFRQ.newInstance((QuestionFRQ) q);
+                questionList.add(fragment);
+            }else if(q instanceof QuestionMCQ){
+                Fragment fragment = FragmentMCQ.newInstance((QuestionMCQ) q);
+                questionList.add(fragment);
             }
         }
 
