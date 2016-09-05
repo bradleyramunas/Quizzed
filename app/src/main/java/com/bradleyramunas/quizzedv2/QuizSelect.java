@@ -44,14 +44,8 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 
 //TODO: Create home page activity, first launch stuff via shared prefs
-//TODO: Make the check and x symbols next to quiz cards after checking look better
-//TODO: Somehow indicate which option from mcq is correct
-//TODO: make all radio buttons disabled? maybe? no point in having them enabled
-//TODO: fix thing so it shows last taken without needing to switch thingies
 //TODO: add last reviewed under quiz title in quiz view
 //TODO: if edit or delete quiz, either change which quiz is being show or go back to home screen?
-//TODO: finish the header drawable for the drawer
-//TODO: Remove any debugging
 //TODO: Add MIT copyright
 //TODO: Update github website thingie
 //TODO: MAYBE: rewrite quiz to make parceable and then delete all repeated code
@@ -84,7 +78,11 @@ public class QuizSelect extends AppCompatActivity {
 
         final Intent intent = new Intent(this, NewQuiz.class);
         db = new MyDBHandler(this, null);
-        AccountHeader header = new AccountHeaderBuilder().withActivity(this).withHeaderBackground(R.drawable.header).build();
+        AccountHeader header = new AccountHeaderBuilder()
+                .withActivity(this)
+                .withHeaderBackground(R.drawable.header)
+                .withCompactStyle(true)
+                .build();
         drawer = new DrawerBuilder()
                 .withActivity(this)
                 .withToolbar(toolbar)
@@ -346,10 +344,8 @@ public class QuizSelect extends AppCompatActivity {
         }
         if(requestCode == 10){
             if(resultCode == GOOD){
-                String quizName = intent.getStringExtra("quizName");
-                Quiz quiz = db.getQuizFromDatabase(quizName);
-                FragmentDisplayQuiz fdq = FragmentDisplayQuiz.createInstance(quizName, quiz.getQuestionList().size(), new Date(this.getSharedPreferences(getString(R.string.quiz_data_preferences_key), Context.MODE_PRIVATE).getLong(quizName+"_lastCompleted", 0)).toString());
-                changeFragment(fdq);
+                FragmentDisplayQuiz fragmentDisplayQuiz = (FragmentDisplayQuiz) getSupportFragmentManager().findFragmentById(fragmentHolder.getId());
+                fragmentDisplayQuiz.updateLastTaken();
             }
         }
     }

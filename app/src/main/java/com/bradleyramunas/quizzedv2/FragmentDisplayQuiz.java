@@ -62,7 +62,7 @@ public class FragmentDisplayQuiz extends Fragment {
 
         quizTitle.setText(getArguments().getString("quizTitle"));
         questionAmount.setText(getArguments().getInt("questionAmount") + " Questions");
-        quizLastTaken.setText(getArguments().getString("quizLastTaken"));
+
 
         methodOneTitle.setText("Quiz");
         methodOneDescription.setText("Take a traditional quiz");
@@ -71,6 +71,8 @@ public class FragmentDisplayQuiz extends Fragment {
             time = "Never";
         }
         methodOneLastTaken.setText("Last Taken On: " + time);
+        quizLastTaken.setText("Last Reviewed On: " + time);
+
 
 
         quizCard.setOnClickListener(new View.OnClickListener() {
@@ -100,12 +102,23 @@ public class FragmentDisplayQuiz extends Fragment {
                     i.putExtra("bundle"+tagnum, b);
                     tagnum++;
                 }
-                startActivityForResult(i, 10);
+                getActivity().startActivityForResult(i, 10);
 
             }
         });
 
         return view;
     }
+
+    public void updateLastTaken(){
+        SharedPreferences sharedPreferences = getActivity().getSharedPreferences(getString(R.string.quiz_data_preferences_key), getContext().MODE_PRIVATE);
+        String time = new Date(sharedPreferences.getLong(getArguments().getString("quizTitle") + "_lastCompleted", 0)).toString();
+        if(time.contains("1969")){
+            time = "Never";
+        }
+        methodOneLastTaken.setText("Last Taken On: " + time);
+        quizLastTaken.setText("Last Reviewed On: " + time);
+    }
+
 
 }

@@ -66,7 +66,6 @@ public class EditQuiz extends AppCompatActivity {
         title.setText(i.getStringExtra("originalQuizName"));
         originalQuizName = i.getStringExtra("originalQuizName");
 
-        Log.e("TEST", amount+"");
 
         for(int z = 0; z<amount; z++){
             //mcq = false, frq = true
@@ -161,6 +160,10 @@ public class EditQuiz extends AppCompatActivity {
             return;
         }
 
+        if(quizNames.contains(title.getText().toString()) && !title.getText().toString().equals(originalQuizName)){
+            Toast.makeText(this, "A quiz with that name already exists!", Toast.LENGTH_LONG).show();
+            return;
+        }
 
         for(int z = 0; z<children; z++){
             FrameLayout fl = (FrameLayout) questionHolder.getChildAt(z);

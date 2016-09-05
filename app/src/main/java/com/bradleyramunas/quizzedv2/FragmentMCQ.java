@@ -2,6 +2,7 @@ package com.bradleyramunas.quizzedv2;
 
 
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.CardView;
@@ -103,24 +104,35 @@ public class FragmentMCQ extends Fragment implements QuestionType{
 
     public boolean checkAnswer(){
         boolean check;
+        op1.setClickable(false);
+        op2.setClickable(false);
+        op3.setClickable(false);
+        op4.setClickable(false);
+        if(op1.getText().toString().equals(answerText)){
+            op1.setTypeface(null, Typeface.BOLD);
+        }else if(op2.getText().toString().equals(answerText)){
+            op2.setTypeface(null, Typeface.BOLD);
+        }else if(op3.getText().toString().equals(answerText)){
+            op3.setTypeface(null, Typeface.BOLD);
+        }else if(op4.getText().toString().equals(answerText)){
+            op4.setTypeface(null, Typeface.BOLD);
+        }
         try {
-             check = ((RadioButton)group.findViewById(group.getCheckedRadioButtonId())).getText().toString().equals(answerText);
-            Log.e("WTF", ((RadioButton)group.findViewById(group.getCheckedRadioButtonId())).getText().toString());
-            Log.e("WTF", answerText);
+            check = ((RadioButton)group.findViewById(group.getCheckedRadioButtonId())).getText().toString().equals(answerText);
 
             if(check){
                 //questionCardView.setBackgroundColor(Color.parseColor("#43A047"));
                 checkResult.setImageResource(R.drawable.ic_done_black_24dp);
             }else{
                 //questionCardView.setBackgroundColor(Color.parseColor("#E53935"));
-                checkResult.setImageResource(R.drawable.ic_clear_20dp);
+                checkResult.setImageResource(R.drawable.ic_clear_black_24dp);
             }
 
             return check;
 
         } catch (NullPointerException e){
             //questionCardView.setBackgroundColor(Color.parseColor("#E53935"));
-            checkResult.setImageResource(R.drawable.ic_clear_20dp);
+            checkResult.setImageResource(R.drawable.ic_clear_black_24dp);
 
         } finally {
         }

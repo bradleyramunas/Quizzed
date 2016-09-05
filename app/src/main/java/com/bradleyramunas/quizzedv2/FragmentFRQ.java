@@ -2,6 +2,7 @@ package com.bradleyramunas.quizzedv2;
 
 
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.CardView;
@@ -10,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import org.w3c.dom.Text;
@@ -27,6 +29,8 @@ public class FragmentFRQ extends Fragment implements QuestionType{
     private EditText answerT;
 
     private ImageView checkResult;
+
+    private LinearLayout cardLayout;
 
     private CardView questionCardView;
 
@@ -64,7 +68,7 @@ public class FragmentFRQ extends Fragment implements QuestionType{
         questionT = (TextView) view.findViewById(R.id.questionText);
         answerT   = (EditText) view.findViewById(R.id.userAnswer);
         questionCardView = (CardView) view.findViewById(R.id.questionCardView);
-
+        cardLayout = (LinearLayout) view.findViewById(R.id.cardLayout);
         checkResult = (ImageView) view.findViewById(R.id.checkResult);
 
         questionT.setText(questionText);
@@ -84,13 +88,22 @@ public class FragmentFRQ extends Fragment implements QuestionType{
 
     public boolean checkAnswer(){
         boolean check = answerT.getText().toString().equals(answerText);
+        answerT.setClickable(false);
+        answerT.setFocusable(false);
+        TextView textView = new TextView(cardLayout.getContext());
+        textView.setText("Correct answer: " + answerText);
+        textView.setTextColor(Color.BLACK);
+        textView.setTextSize(16);
+        //textView.setTypeface(null, Typeface.BOLD);
+        cardLayout.addView(textView, 1);
+
         if(check){
             //questionCardView.setBackgroundColor(Color.parseColor("#43A047"));
             checkResult.setImageResource(R.drawable.ic_done_black_24dp);
         }
         else{
            //questionCardView.setBackgroundColor(Color.parseColor("#E53935"));
-            checkResult.setImageResource(R.drawable.ic_clear_20dp);
+            checkResult.setImageResource(R.drawable.ic_clear_black_24dp);
         }
         return check;
     }

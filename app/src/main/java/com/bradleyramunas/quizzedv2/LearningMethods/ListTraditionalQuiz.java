@@ -43,6 +43,7 @@ public class ListTraditionalQuiz extends AppCompatActivity {
     private LinearLayout ll;
     private String quizName;
     private Button finishQuiz;
+    private boolean hasCompletedQuiz = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -98,13 +99,22 @@ public class ListTraditionalQuiz extends AppCompatActivity {
 
     @Override
     public void onBackPressed(){
-        finish();
+        if(hasCompletedQuiz){
+            Intent i = new Intent();
+            i.putExtra("quizName", quizName);
+            setResult(QuizSelect.GOOD, i);
+            finish();
+        }else{
+            setResult(QuizSelect.CANCELED);
+            finish();
+        }
+        super.onBackPressed();
     }
 
     public void onCheckQuizPress(View view){
         int amountCorrect = 0;
         int questionAmount = ll.getChildCount()-1;
-
+        hasCompletedQuiz = true;
         int childCount = ll.getChildCount()-1;
         for(int i = 0; i<childCount; i++){
             FrameLayout fl = (FrameLayout) ll.getChildAt(i);
@@ -125,10 +135,6 @@ public class ListTraditionalQuiz extends AppCompatActivity {
         editor.putInt(quizName + "_amountCorrect", amountCorrect).apply();
         editor.putInt(quizName + "_totalQuestions", questionAmount).apply();
 
-        Intent i = new Intent();
-        i.putExtra("quizName", quizName);
-        setResult(QuizSelect.GOOD, i);
-
         ll.removeView(finishQuiz);
 
         new AlertDialog.Builder(this)
@@ -144,6 +150,9 @@ public class ListTraditionalQuiz extends AppCompatActivity {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.cancel();
+                        Intent i = new Intent();
+                        i.putExtra("quizName", quizName);
+                        setResult(QuizSelect.GOOD, i);
                         finish();
                     }
                 })
